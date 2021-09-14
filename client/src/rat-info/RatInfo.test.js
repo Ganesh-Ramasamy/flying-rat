@@ -3,9 +3,12 @@ import { render, screen, waitFor } from '@testing-library/react';
 import RatInfo from './RatInfo';
 import {setupServer} from 'msw/node'
 import { rest } from 'msw'
+import configData from "../config.json";
 
+let url = `${configData.SERVER_URL}/rat/catherine`;
 const server = setupServer(
-  rest.get(`http://localhost:7421/rat/catherine`, (req, res, ctx) => {
+
+  rest.get(url, (req, res, ctx) => {
     return res(ctx.json({"name": "catherine", "width":23, "height":18}))
   }),
 )
@@ -14,9 +17,14 @@ beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
+test("renders without crashing", () => {
+    render(<RatInfo />);
+  });
+
 test('should load component and display rat information', async () => {
+url = `${configData.SERVER_URL}/rat/dervin`;
 server.use(
-    rest.get(`http://localhost:7421/rat/dervin`, (req, res, ctx) => {
+    rest.get(url, (req, res, ctx) => {
         return res(ctx.json({ "name": "dervin", "width":21, "height":18, "nickname":"La King" }));
     }),
     )
