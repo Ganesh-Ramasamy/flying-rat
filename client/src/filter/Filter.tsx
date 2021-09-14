@@ -3,7 +3,7 @@ import React from 'react';
 import Select from 'react-select';
 import { OptionType } from '../types/option.type';
 import './Filter.scss';
-
+import configData from "../config.json";
 interface FilterState {
    rats: OptionType[];
 }
@@ -22,7 +22,8 @@ class Filter extends React.Component<FilterProps, FilterState> {
     async componentDidMount() {
         try {
             this._isMounted = true;
-            let response = await axios.get<string[]>("http://localhost:7421/rat-names");
+            const url = `${configData.SERVER_URL}/rat-names`;
+            let response = await axios.get<string[]>(url);
             const rats = response.data.map<OptionType>( e => ({value: e, label: e}));
             if (this._isMounted) {
                 this.setState({ rats });

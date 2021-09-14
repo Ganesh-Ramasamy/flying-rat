@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import React from 'react';
-
+import configData from "../config.json";
 
 interface Info{
     name?: string;
@@ -28,8 +28,9 @@ class RatInfo extends React.Component<InfoProps, InfoState> {
         if(prevProps.name !== this.props.name){
             try {
                 this._isMounted = true;
+                const url = `${configData.SERVER_URL}/rat/${this.props.name}`;
                 const infoResponse : AxiosResponse<Info> = await axios
-                .get<Info>(`http://localhost:7421/rat/${this.props.name}`);
+                .get<Info>(url);
                 let info = infoResponse.data;
                 if (this._isMounted) {
                     this.setState({info});
